@@ -1,0 +1,139 @@
+body,
+header {
+  margin: 0 auto;
+  padding: 0;
+  font-family: sans-serif;
+  color: rgb(69, 82, 108);
+}
+
+header {
+  height: 80px;
+}
+
+h1 {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+div {
+  border: 1px solid black;
+}
+
+p {
+  margin: 0 auto;
+  padding: 0;
+  display: block;
+  font-size: 18px;
+}
+
+button {
+  margin: 0 10px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: rgb(255, 174, 150);
+  color: rgb(69, 82, 108);
+  font-size: 18px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 0;
+  width: 75px;
+  height: 106px;
+  display: inline-block;
+  list-style: none;
+  /* border: 1px solid black; */
+  border-radius: 10px;
+  background: rgb(128, 159, 160);
+  color: rgb(245, 245, 245);
+  text-align: center;
+  align-content: center;
+}
+
+.dealer-container,
+.options-container {
+  margin: 10px auto;
+  text-align: center;
+}
+
+.dealer-container {
+  margin: auto;
+  width: 500px;
+  height: 220px;
+  align-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 210px;
+  column-gap: 10px;
+}
+
+.dealer-container div {
+  margin: 0 auto;
+  display: inline-block;
+  width: 150px;
+  height: 210px;
+  padding: 0;
+  border: 0;
+  border-radius: 15px;
+}
+
+div#deck {
+  background: rgb(68, 103, 104);
+  color: rgb(245, 245, 245);
+}
+
+div#deal-card {
+  background: rgb(128, 159, 160);
+  color: rgb(245, 245, 245);
+}
+
+div#deck p,
+div#deal-card p {
+  font-size: 70px;
+}
+
+div#marble-pool {
+  border: 6px solid rgb(128, 159, 160);
+  width: 138px;
+  height: 198px;
+}
+
+div#marble {
+  margin: 50% auto;
+  width: 50px;
+  height: 50px;
+  background: cornflowerblue;
+  border: 0;
+  border-radius: 100%;
+}
+
+div#marble-pool p {
+  position: relative;
+  top: -40px;
+  color: rgb(69, 82, 108);
+  font-size: 40px;
+}
+
+.options-container {
+  display: block;
+  width: 100%;
+}
+
+.player-container,
+.computer-container {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+}
+
+#player-marble, #com-marble {
+  text-align: right;
+
+}

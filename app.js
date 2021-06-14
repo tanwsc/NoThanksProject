@@ -7,6 +7,11 @@ const game = {
 
 // some instructions before game starts, hide after game start
 
+// call names
+const $deck = $("#deck");
+const $takeCard = $("#take");
+const $giveMarb = $("#give");
+
 /////////////////////////////////////////////////////////////// make deck
 // value 1 - 35
 const makeDeck = () => {
@@ -17,7 +22,6 @@ const makeDeck = () => {
 
 /////////////////////////////////////////////////////////////// shuffle deck
 // -10 cards, push rest of deck into dealer hand
-const $deck = $("#deck");
 const shuffleDeck = (game) => {
   let count = game.deck.length;
   while (count) {
@@ -65,17 +69,40 @@ const sortHand = (turn) => {
 // -1 from marble invt and +1 in marble pool
 const giveMarble = (turn) => {
   turn = checkTurn();
+  // check if there's enough marbles
+  /*
+  $("button#give").attr("disabled", false);
+  if (game[turn].marble === 0) {
+    $("button#give").attr("disabled", true);
+  }
+  */
   game[turn].marble -= 1;
   game.dealer.marble += 1;
+
   counter += 1;
   render(game);
 };
+// if no marbles, cannot give marble
+/*
+const checkMarble = (turn) => {
+  turn = checkTurn();
+  if (game[turn].marble === 0) {
+    $("button#give").attr("disabled", "disabled");
+    render(game);
+  } else if (game[turn].marble > 0) {
+    $("button#give").removeAttr("disabled", "disabled");
+    render(game);
+  }
+  render(game);
+};
+*/
 
 /////////////////////////////////////////////////////////////// take card
 // dealer.hand => player.hand, deal card
 // make li item with number, add into player div
 const takeCard = (turn) => {
   turn = checkTurn();
+  // checkMarble();
   const currentCard = game.dealer.hand.pop();
   game[turn].hand.push(currentCard);
   game[turn].marble += game.dealer.marble;
@@ -92,23 +119,69 @@ const takeCard = (turn) => {
 /////////////////////////////////////////////////////////////// game end
 // when deck has 0 cards, stop deal and disable buttons
 const gameEnd = () => {
+  const $takeCard = $("#take");
+  const $giveMarb = $("#give");
   if (game.dealer.hand.length === 0) {
-    // sortHand();
-    $("#take").off();
-    $("#give").off();
-    // render();
+    $takeCard.attr("disabled", "disabled");
+    $giveMarb.attr("disabled", "disabled");
+    // render(game);
     const playerScore = sumNoConsec(game.player.hand) - game.player.marble;
     const computerScore =
       sumNoConsec(game.computer.hand) - game.computer.marble;
     if (playerScore < computerScore) {
-      console.log("Player 1 wins!");
+      $("#turn h2").text("Congratulations! You win!");
+      restartGame();
     } else if (computerScore < playerScore) {
-      console.log("Player 2 wins!");
+      $("#turn h2").text("Player 2 wins!");
+      restartGame();
     } else {
-      console.log("it's a tie");
+      $("#turn h2").text("Somehow, it's a tie.");
+      restartGame();
     }
   }
+
   // render();
+};
+
+// make new button or note to restart game
+const restartGame = () => {
+  const $takeCard = $("#take");
+  const $giveMarb = $("#give");
+  $takeCard.attr("disabled", true);
+  $giveMarb.attr("disabled", true);
+  $takeCard.hide();
+  $giveMarb.hide();
+  const $restartButton = $("<button>").attr("id", "restart").text("New game?");
+
+  $(".options-container").append($restartButton);
+};
+
+// reset game data
+const resetData = () => {
+  // empty player hands, reset marble count
+  const p1 = game.player;
+  const p2 = game.computer;
+  $("#player-hand ul").empty();
+  $("#computer-hand ul").empty();
+  p1.marble = 10;
+  p1.hand = [];
+  p2.marble = 10;
+  p2.hand = [];
+
+  // new deck reshuffled
+  makeDeck();
+  shuffleDeck(game);
+
+  // reset buttons
+  const $takeCard = $("#take");
+  const $giveMarb = $("#give");
+  $takeCard.show();
+  $giveMarb.show();
+  $takeCard.removeAttr("disabled");
+  $giveMarb.removeAttr("disabled");
+  $("#restart").remove();
+
+  render(game);
 };
 
 /////////////////////////////////////////////////////////////// tabulte points
@@ -142,17 +215,31 @@ const render = (game) => {
   } else {
     $("#turn h2").text(`Player 2's Turn`);
   }
+  // checkMarble();
 
   $("#deck p").text(`${game.deck.length}`);
   $("#deal-card p").text(`${game.dealer.hand}`);
   $("#marble-pool p").text(`${game.dealer.marble}`);
-  $("#player-hand p").text(`player hand ${game.player.hand}`);
-  $("#player-marble p").text(`player marble ${game.player.marble}`);
-  $("#computer-hand p").text(`computer hand ${game.computer.hand}`);
-  $("#com-marble p").text(`computer marble ${game.computer.marble}`);
+
+  if (game.player.marble === 1) {
+    $(`#player-marble p`).text(`${game.player.marble} marble`);
+  } else {
+    $(`#player-marble p`).text(`${game.player.marble} marbles`);
+  }
+
+  if (game.computer.marble === 1) {
+    $(`#computer-marble p`).text(`${game.computer.marble} marble`);
+  } else {
+    $(`#computer-marble p`).text(`${game.computer.marble} marbles`);
+  }
+  // $("#player-hand p").text(`player hand ${game.player.hand}`);
+  // $("#player-marble p").text(`${game.player.marble} marbles`);
+  // $("#computer-hand p").text(`computer hand ${game.computer.hand}`);
+  // $("#com-marble p").text(`${game.computer.marble} marbles`);
 
   ///////////////////////////// game end
   gameEnd();
+  $("#restart").on("click", resetData);
 };
 
 const main = () => {
@@ -160,6 +247,8 @@ const main = () => {
   makeDeck();
   shuffleDeck(game);
   // dealCard();
+  $("#player-marble p").text(`${game.player.marble} marbles`);
+  $("#computer-marble p").text(`${game.computer.marble} marbles`);
   render(game);
 
   $("#take").on("click", takeCard);

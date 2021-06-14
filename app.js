@@ -69,33 +69,21 @@ const sortHand = (turn) => {
 // -1 from marble invt and +1 in marble pool
 const giveMarble = (turn) => {
   turn = checkTurn();
-  // check if there's enough marbles
-  /*
-  $("button#give").attr("disabled", false);
-  if (game[turn].marble === 0) {
-    $("button#give").attr("disabled", true);
-  }
-  */
   game[turn].marble -= 1;
   game.dealer.marble += 1;
-
   counter += 1;
   render(game);
 };
 // if no marbles, cannot give marble
-/*
+// check if there's enough marbles
 const checkMarble = (turn) => {
   turn = checkTurn();
   if (game[turn].marble === 0) {
-    $("button#give").attr("disabled", "disabled");
-    render(game);
-  } else if (game[turn].marble > 0) {
-    $("button#give").removeAttr("disabled", "disabled");
-    render(game);
+    $("button#give").attr("disabled", true);
+  } else {
+    $("button#give").attr("disabled", false);
   }
-  render(game);
-};
-*/
+}
 
 /////////////////////////////////////////////////////////////// take card
 // dealer.hand => player.hand, deal card
@@ -122,22 +110,21 @@ const gameEnd = () => {
   const $takeCard = $("#take");
   const $giveMarb = $("#give");
   if (game.dealer.hand.length === 0) {
-    $takeCard.attr("disabled", "disabled");
-    $giveMarb.attr("disabled", "disabled");
+    $takeCard.attr("disabled", true);
+    $giveMarb.attr("disabled", true);
     // render(game);
     const playerScore = sumNoConsec(game.player.hand) - game.player.marble;
     const computerScore =
       sumNoConsec(game.computer.hand) - game.computer.marble;
     if (playerScore < computerScore) {
-      $("#turn h2").text("Congratulations! You win!");
-      restartGame();
+      $("#turn h2").text("Congratulations! Player 1 wins!");
     } else if (computerScore < playerScore) {
-      $("#turn h2").text("Player 2 wins!");
-      restartGame();
+      $("#turn h2").text("Hurray! Player 2 wins!");
     } else {
       $("#turn h2").text("Somehow, it's a tie.");
-      restartGame();
+      
     }
+    restartGame();
   }
 
   // render();
@@ -147,8 +134,8 @@ const gameEnd = () => {
 const restartGame = () => {
   const $takeCard = $("#take");
   const $giveMarb = $("#give");
-  $takeCard.attr("disabled", true);
-  $giveMarb.attr("disabled", true);
+  // $takeCard.attr("disabled", true);
+  // $giveMarb.attr("disabled", true);
   $takeCard.hide();
   $giveMarb.hide();
   const $restartButton = $("<button>").attr("id", "restart").text("New game?");
@@ -215,7 +202,7 @@ const render = (game) => {
   } else {
     $("#turn h2").text(`Player 2's Turn`);
   }
-  // checkMarble();
+  checkMarble();
 
   $("#deck p").text(`${game.deck.length}`);
   $("#deal-card p").text(`${game.dealer.hand}`);
@@ -226,7 +213,6 @@ const render = (game) => {
   } else {
     $(`#player-marble p`).text(`${game.player.marble} marbles`);
   }
-
   if (game.computer.marble === 1) {
     $(`#computer-marble p`).text(`${game.computer.marble} marble`);
   } else {

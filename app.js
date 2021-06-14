@@ -2,6 +2,7 @@ const game = {
   player: { hand: [], marble: 10 },
   computer: { hand: [], marble: 10 },
   alien: { hand: [], marble: 10 },
+  
   dealer: { hand: [], marble: 0 },
   deck: [],
 
@@ -114,6 +115,25 @@ const takeCard = (turn) => {
   render(game);
 };
 
+/////////////////////////////////////////////////////////////// tabulte points
+// find consecutive numbers, group them, return smallest number
+const sumNoConsec = (arr) => {
+  const consec = [];
+  for (let num = 0; num < arr.length - 1; num++) {
+    if (arr[num] + 1 === arr[num + 1]) {
+      consec.push(arr[num + 1]);
+    }
+  }
+
+  // exclude all consec numbers and sum numbers
+  const sum = (acc, val) => {
+    return acc + val;
+  };
+  const consecSum = consec.reduce(sum, 0);
+  const totalSum = arr.reduce(sum);
+  return totalSum - consecSum;
+};
+
 /////////////////////////////////////////////////////////////// game end
 // when deck has 0 cards, stop deal and disable buttons
 const gameEnd = () => {
@@ -122,7 +142,8 @@ const gameEnd = () => {
     $("#give").attr("disabled", true);
     // render(game);
     const playerScore = sumNoConsec(game.player.hand) - game.player.marble;
-    const computerScore = sumNoConsec(game.computer.hand) - game.computer.marble;
+    const computerScore =
+      sumNoConsec(game.computer.hand) - game.computer.marble;
     const alienScore = sumNoConsec(game.alien.hand) - game.alien.marble;
     if (playerScore < computerScore && playerScore < alienScore) {
       $("#turn h2").text("Congratulations! Player 1 wins!");
@@ -179,25 +200,6 @@ const resetData = () => {
   render(game);
 };
 
-/////////////////////////////////////////////////////////////// tabulte points
-// find consecutive numbers, group them, return smallest number
-const sumNoConsec = (arr) => {
-  const consec = [];
-  for (let num = 0; num < arr.length - 1; num++) {
-    if (arr[num] + 1 === arr[num + 1]) {
-      consec.push(arr[num + 1]);
-    }
-  }
-
-  // exclude all consec numbers and sum numbers
-  const sum = (acc, val) => {
-    return acc + val;
-  };
-  const consecSum = consec.reduce(sum);
-  const totalSum = arr.reduce(sum);
-  return totalSum - consecSum;
-};
-
 /////////////////////////////////////////////////////////////// render
 const render = (game) => {
   ///////////////////////////// start game
@@ -217,6 +219,9 @@ const render = (game) => {
   $("#deck p").text(`${game.deck.length}`);
   $("#deal-card p").text(`${game.dealer.hand}`);
   $("#marble-pool p").text(`${game.dealer.marble}`);
+  $("#player-marble p").text(`${game.player.marble} marbles`);
+  $("#computer-marble p").text(`${game.computer.marble} marbles`);
+  $("#alien-marble p").text(`${game.alien.marble} marbles`);
 
   // $("#player-hand p").text(`player hand ${game.player.hand}`);
   // $("#player-marble p").text(`${game.player.marble} marbles`);
@@ -235,13 +240,10 @@ const main = () => {
     $(".intro").hide();
     $(".game-container").show();
   });
-  // console.log(checkTurn());
+
   makeDeck();
   shuffleDeck(game);
-  // dealCard();
-  $("#player-marble p").text(`${game.player.marble} marbles`);
-  $("#computer-marble p").text(`${game.computer.marble} marbles`);
-  $("#alien-marble p").text(`${game.alien.marble} marbles`);
+
   render(game);
 
   $("#take").on("click", takeCard);

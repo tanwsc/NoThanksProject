@@ -10,9 +10,14 @@ header {
   height: 80px;
 }
 
-h1 {
+h2,
+h3 {
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 0;
+}
+
+h1 {
+  margin: 40px;
 }
 
 div {
@@ -21,7 +26,7 @@ div {
 
 p {
   margin: 0 auto;
-  padding: 0;
+  padding: 20px 0;
   display: block;
   font-size: 18px;
 }
@@ -30,10 +35,26 @@ button {
   margin: 0 10px;
   padding: 8px 10px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: rgb(255, 174, 150);
   color: rgb(69, 82, 108);
   font-size: 18px;
+}
+
+button:hover {
+  /* background: rgb(255, 174, 150); */
+  color: rgb(245, 245, 245);
+  cursor: pointer;
+}
+
+button:active {
+  background: rgb(224, 128, 99);
+  color: rgb(245, 245, 245);
+}
+
+button[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 ul {
@@ -49,12 +70,13 @@ ul li {
   height: 106px;
   display: inline-block;
   list-style: none;
-  /* border: 1px solid black; */
   border-radius: 10px;
   background: rgb(128, 159, 160);
   color: rgb(245, 245, 245);
+  font-size: 28px;
   text-align: center;
   align-content: center;
+  line-height: 106px;
 }
 
 .dealer-container,
@@ -96,6 +118,9 @@ div#deal-card {
 
 div#deck p,
 div#deal-card p {
+  padding: 0;
+  height: 210px;
+  line-height: 210px;
   font-size: 70px;
 }
 
@@ -115,6 +140,7 @@ div#marble {
 }
 
 div#marble-pool p {
+  padding: 0;
   position: relative;
   top: -40px;
   color: rgb(69, 82, 108);
@@ -128,12 +154,12 @@ div#marble-pool p {
 
 .player-container,
 .computer-container {
-  padding: 10px;
+  padding: 10px 40px;
   display: grid;
-  grid-template-columns: 5fr 1fr;
+  grid-template-columns: 7fr 1fr;
 }
 
-#player-marble, #com-marble {
+#player-marble,
+#computer-marble {
   text-align: right;
-
 }

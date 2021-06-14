@@ -1,9 +1,12 @@
 const game = {
   player: { hand: [], marble: 10 },
   computer: { hand: [], marble: 10 },
-  // alien: { hand: [], marble: 10 },
+  alien: { hand: [], marble: 10 },
   dealer: { hand: [], marble: 0 },
   deck: [],
+
+  playerCount: ["player", "computer", "alien"],
+  counter: 0,
 };
 
 /////////////////////////////////////////////////////////////// game instructions
@@ -39,13 +42,10 @@ const dealCard = () => {
 };
 
 /////////////////////////////////////////////////////////////// count turn
-let counter = 0;
-const checkTurn = () => {
-  if (counter % 2 === 0) {
-    return "player";
-  } else {
-    return "computer";
-  }
+const checkTurn = (turn) => {
+  turn = game.playerCount;
+  let index = game.counter % turn.length;
+  return turn[index];
 };
 
 /////////////////////////////////////////////////////////////// sort player hands
@@ -79,7 +79,7 @@ const giveMarble = (turn) => {
   game[turn].marble -= 1;
   game.dealer.marble += 1;
   updateMarbCount();
-  counter += 1;
+  game.counter += 1;
 
   render(game);
 };
@@ -106,7 +106,7 @@ const takeCard = (turn) => {
   game.dealer.marble = 0;
   sortHand();
   updateMarbCount();
-  counter += 1;
+  game.counter += 1;
   // console.log(game[turn].hand);
   if (game.deck.length !== 0) {
     dealCard();
@@ -122,19 +122,19 @@ const gameEnd = () => {
     $("#give").attr("disabled", true);
     // render(game);
     const playerScore = sumNoConsec(game.player.hand) - game.player.marble;
-    const computerScore =
-      sumNoConsec(game.computer.hand) - game.computer.marble;
-    // const alienScore = sumNoConsec(game.alien.hand) - game.alien.marble;
-    if (playerScore < computerScore) {
+    const computerScore = sumNoConsec(game.computer.hand) - game.computer.marble;
+    const alienScore = sumNoConsec(game.alien.hand) - game.alien.marble;
+    if (playerScore < computerScore && playerScore < alienScore) {
       $("#turn h2").text("Congratulations! Player 1 wins!");
-    } else if (computerScore < playerScore) {
+    } else if (computerScore < playerScore && computerScore < alienScore) {
       $("#turn h2").text("Hurray! Player 2 wins!");
+    } else if (alienScore < playerScore && alienScore < computerScore) {
+      $("#turn h2").text("Badaboom! Player 3 wins!");
     } else {
       $("#turn h2").text("Somehow, it's a tie.");
     }
     restartGame();
   }
-
   // render();
 };
 
@@ -153,20 +153,21 @@ const resetData = () => {
   // empty player hands, reset marble count
   const p1 = game.player;
   const p2 = game.computer;
-  // const p3 = game.alien;
+  const p3 = game.alien;
   $("#player-hand ul").empty();
   $("#computer-hand ul").empty();
-  // $("#alien-hand ul").empty();
+  $("#alien-hand ul").empty();
   p1.marble = 10;
   p1.hand = [];
   p2.marble = 10;
   p2.hand = [];
-  // p3.marble = 10;
-  // p3.hand = [];
+  p3.marble = 10;
+  p3.hand = [];
 
-  // new deck reshuffled
+  // new deck new counter
   makeDeck();
   shuffleDeck(game);
+  game.counter = 0;
 
   // reset buttons
   const $takeCard = $("#take");
@@ -208,9 +209,9 @@ const render = (game) => {
     $("#turn h2").text(`Player 1's Turn`);
   } else if (checkTurn() === "computer") {
     $("#turn h2").text(`Player 2's Turn`);
-  } //else {
-  //   $("#turn h2").text(`Player 3's Turn`);
-  // }
+  } else {
+    $("#turn h2").text(`Player 3's Turn`);
+  }
   checkMarble();
 
   $("#deck p").text(`${game.deck.length}`);
@@ -228,13 +229,19 @@ const render = (game) => {
 };
 
 const main = () => {
+  $(".intro").show();
+  $(".game-container").hide();
+  $("#start").on("click", () => {
+    $(".intro").hide();
+    $(".game-container").show();
+  });
   // console.log(checkTurn());
   makeDeck();
   shuffleDeck(game);
   // dealCard();
   $("#player-marble p").text(`${game.player.marble} marbles`);
   $("#computer-marble p").text(`${game.computer.marble} marbles`);
-  // $("#alien-marble p").text(`${game.alien.marble} marbles`);
+  $("#alien-marble p").text(`${game.alien.marble} marbles`);
   render(game);
 
   $("#take").on("click", takeCard);

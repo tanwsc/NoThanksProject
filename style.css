@@ -79,6 +79,27 @@ ul li {
   line-height: 106px;
 }
 
+.intro {
+  margin: 0 auto;
+  padding: 40px;
+  border: 6px solid rgb(128, 159, 160);
+  border-radius: 10px;
+  max-width: 1000px;
+  background: rgb(245, 245, 245);
+  text-align: justify;
+  position: absolute;
+  left: 40px;
+  right: 40px;
+}
+
+.intro h2, .intro p {
+  padding:0 0 20px 0;
+}
+
+#start {
+  margin: 0;
+}
+
 .dealer-container,
 .options-container {
   margin: 10px auto;
@@ -153,13 +174,13 @@ div#marble-pool p {
 }
 
 .player-container,
-.computer-container {
+.computer-container, .alien-container {
   padding: 10px 40px;
   display: grid;
   grid-template-columns: 7fr 1fr;
 }
 
 #player-marble,
-#computer-marble {
+#computer-marble, #alien-marble {
   text-align: right;
 }

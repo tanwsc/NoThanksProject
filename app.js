@@ -1,22 +1,34 @@
 const game = {
-  player: { hand: [], marble: 10 },
-  computer: { hand: [], marble: 10 },
-  alien: { hand: [], marble: 10 },
-  
+  startDeck: 35,
+  startMarble: 10,
+
+  counter: 0,
+
   dealer: { hand: [], marble: 0 },
   deck: [],
 
-  playerCount: ["player", "computer", "alien"],
-  counter: 0,
+  players: [
+    { name: "Player 1", id: "player", hand: [], marble: 10, score: 0 },
+    { name: "Player 2", id: "computer", hand: [], marble: 10, score: 0 },
+    { name: "Player 3", id: "alien", hand: [], marble: 10, score: 0 },
+  ],
 };
 
 /////////////////////////////////////////////////////////////// game instructions
-// some instructions before game starts, hide after game start
+// tutorial notice, hide after game start
+const gameTutorial = () => {
+  $(".intro").show();
+  $(".game-container").hide();
+  $("#start").on("click", () => {
+    $(".intro").hide();
+    $(".game-container").show();
+  });
+};
 
 /////////////////////////////////////////////////////////////// make deck
-// value 1 - 35
+// value 1 - 35, set number 35 to const
 const makeDeck = () => {
-  for (let c = 0; c < 35; c++) {
+  for (let c = 0; c < game.startDeck; c++) {
     game.deck.push(c + 1);
   }
 };
@@ -24,13 +36,14 @@ const makeDeck = () => {
 /////////////////////////////////////////////////////////////// shuffle deck
 // -10 cards, push rest of deck into dealer hand
 const shuffleDeck = (game) => {
-  let count = game.deck.length;
+  let playDeck = game.deck;
+  let count = playDeck.length;
   while (count) {
-    let temp = game.deck.splice(Math.floor(Math.random() * count), 1);
-    game.deck.splice(count, 0, temp[0]);
+    let temp = playDeck.splice(Math.floor(Math.random() * count), 1);
+    playDeck.splice(count, 0, temp[0]);
     count -= 1;
   }
-  game.deck = game.deck.slice(0, 25);
+  playDeck = playDeck.slice(0, game.startDeck - 10);
   dealCard();
   // console.log(game.deck);
 };
@@ -44,30 +57,31 @@ const dealCard = () => {
 
 /////////////////////////////////////////////////////////////// count turn
 const checkTurn = (turn) => {
-  turn = game.playerCount;
+  turn = game.players;
   let index = game.counter % turn.length;
-  return turn[index];
+  return index; // returns index number
 };
 
 /////////////////////////////////////////////////////////////// sort player hands
+// make li item with number, add into player div
 const sortHand = (turn) => {
   turn = checkTurn();
-  game[turn].hand.sort((a, b) => a - b);
-  const $handList = $(`#${turn}-hand ul`);
+  let playerHand = game.players[turn];
+  playerHand["hand"].sort((a, b) => a - b);
+  let $handList = $(`#${playerHand["id"]}-hand ul`);
   $handList.empty();
-  for (let c = 0; c < game[turn].hand.length; c++) {
-    const $newLi = $("<li>").text(`${game[turn].hand[c]}`);
+  for (let c = 0; c < playerHand["hand"].length; c++) {
+    const $newLi = $("<li>").text(`${playerHand["hand"][c]}`);
     $handList.append($newLi);
   }
 };
-
-// ??? disable game clickables if not player turn
 
 /////////////////////////////////////////////////////////////// give marble
 // check if there's enough marbles
 const checkMarble = (turn) => {
   turn = checkTurn();
-  if (game[turn].marble === 0) {
+  let playerMarb = game.players[turn].marble;
+  if (playerMarb === 0) {
     $("#give").attr("disabled", true);
   } else {
     $("#give").attr("disabled", false);
@@ -77,7 +91,8 @@ const checkMarble = (turn) => {
 // -1 from marble invt and +1 in marble pool
 const giveMarble = (turn) => {
   turn = checkTurn();
-  game[turn].marble -= 1;
+  let playerMarb = game.players[turn].marble;
+  playerMarb -= 1;
   game.dealer.marble += 1;
   updateMarbCount();
   game.counter += 1;
@@ -87,23 +102,23 @@ const giveMarble = (turn) => {
 
 const updateMarbCount = (turn) => {
   turn = checkTurn();
+  const playerMarb = game.players[turn].marble;
   // $(`#${turn}-marble p`).text(`${game[turn].marble} marbles`);
-  if (game[turn].marble === 1) {
-    $(`#${turn}-marble p`).text(`${game[turn].marble} marble`);
+  if (playerMarb === 1) {
+    $(`#${game.players[turn]["id"]}-marble p`).text(`${playerMarb} marble`);
   } else {
-    $(`#${turn}-marble p`).text(`${game[turn].marble} marbles`);
+    $(`#${game.players[turn]["id"]}-marble p`).text(`${playerMarb} marbles`);
   }
 };
 
 /////////////////////////////////////////////////////////////// take card
 // dealer.hand => player.hand, deal card
-// make li item with number, add into player div
 const takeCard = (turn) => {
   turn = checkTurn();
-  // checkMarble();
+  const player = game.players[turn];
   const currentCard = game.dealer.hand.pop();
-  game[turn].hand.push(currentCard);
-  game[turn].marble += game.dealer.marble;
+  player.hand.push(currentCard);
+  player.marble += game.dealer.marble;
   game.dealer.marble = 0;
   sortHand();
   updateMarbCount();
@@ -116,7 +131,7 @@ const takeCard = (turn) => {
 };
 
 /////////////////////////////////////////////////////////////// tabulte points
-// find consecutive numbers, group them, return smallest number
+// find consecutive numbers, group them
 const sumNoConsec = (arr) => {
   const consec = [];
   for (let num = 0; num < arr.length - 1; num++) {
@@ -134,6 +149,35 @@ const sumNoConsec = (arr) => {
   return totalSum - consecSum;
 };
 
+// subtract marble count
+const finalScore = () => {
+  let players = game.players;
+  for (let t = 0; t < players.length; t++) {
+    players[t].score = sumNoConsec(players[t].hand) - players[t].marble;
+  }
+};
+
+// find lowest score amongst all players
+const findLowestScore = (players) => {
+  finalScore();
+  players = game.players;
+  let lowest = players[0];
+  for (let s = 0; s < players.length; s++) {
+    if (players[s].score < lowest.score) {
+      lowest = players[s];
+    }
+  }
+  if (lowest["id"] === 'player') {
+    $("#turn h2").text(`Congratulations! Player 1 wins!`);
+  } else if (lowest["id"] === "computer") {
+    $("#turn h2").text("Hurray! Player 2 wins!");
+  } else if (lowest["id"] === "alien") {
+    $("#turn h2").text("Badaboom! Player 3 wins!");
+  } else {
+    $("#turn h2").text("Somehow, it's a tie.");
+  }
+};
+
 /////////////////////////////////////////////////////////////// game end
 // when deck has 0 cards, stop deal and disable buttons
 const gameEnd = () => {
@@ -141,18 +185,15 @@ const gameEnd = () => {
     $("#take").attr("disabled", true);
     $("#give").attr("disabled", true);
     // render(game);
-    const playerScore = sumNoConsec(game.player.hand) - game.player.marble;
-    const computerScore =
-      sumNoConsec(game.computer.hand) - game.computer.marble;
-    const alienScore = sumNoConsec(game.alien.hand) - game.alien.marble;
-    if (playerScore < computerScore && playerScore < alienScore) {
-      $("#turn h2").text("Congratulations! Player 1 wins!");
-    } else if (computerScore < playerScore && computerScore < alienScore) {
-      $("#turn h2").text("Hurray! Player 2 wins!");
-    } else if (alienScore < playerScore && alienScore < computerScore) {
-      $("#turn h2").text("Badaboom! Player 3 wins!");
-    } else {
-      $("#turn h2").text("Somehow, it's a tie.");
+
+    findLowestScore();
+
+    // update player scores
+    for (let pl = 0; pl < game.players.length; pl++) {
+      // const playerArr = [p1.score, p2.score, p3.score];
+      $(`#${game.players[pl]['id']}-hand h3`).text(
+        `Player ${pl + 1} scores ${game.players[pl]['score']}`
+      );
     }
     restartGame();
   }
@@ -172,18 +213,13 @@ const restartGame = () => {
 // reset game data
 const resetData = () => {
   // empty player hands, reset marble count
-  const p1 = game.player;
-  const p2 = game.computer;
-  const p3 = game.alien;
-  $("#player-hand ul").empty();
-  $("#computer-hand ul").empty();
-  $("#alien-hand ul").empty();
-  p1.marble = 10;
-  p1.hand = [];
-  p2.marble = 10;
-  p2.hand = [];
-  p3.marble = 10;
-  p3.hand = [];
+  for (let p = 0; p < game.players.length; p++) {
+    const players = game.players;
+    $(`#${players[p]['id']}-hand ul`).empty();
+    players[p].marble = game.startMarble;
+    players[p].hand = [];
+    $(`#${players[p]['id']}-hand h3`).text(`${players[p]['name']}`);
+  }
 
   // new deck new counter
   makeDeck();
@@ -219,9 +255,14 @@ const render = (game) => {
   $("#deck p").text(`${game.deck.length}`);
   $("#deal-card p").text(`${game.dealer.hand}`);
   $("#marble-pool p").text(`${game.dealer.marble}`);
-  $("#player-marble p").text(`${game.player.marble} marbles`);
-  $("#computer-marble p").text(`${game.computer.marble} marbles`);
-  $("#alien-marble p").text(`${game.alien.marble} marbles`);
+
+  for (let m = 0; m < game.players.length; m++) {
+    const players = game.players;
+    $(`#${players[m]['name']}-marble p`).text(`${players[m].marble} marbles`);
+  }
+  // $("#player-marble p").text(`${game.players[0].marble} marbles`);
+  // $("#computer-marble p").text(`${game.players[1].marble} marbles`);
+  // $("#alien-marble p").text(`${game.players[2].marble} marbles`);
 
   // $("#player-hand p").text(`player hand ${game.player.hand}`);
   // $("#player-marble p").text(`${game.player.marble} marbles`);
@@ -234,12 +275,7 @@ const render = (game) => {
 };
 
 const main = () => {
-  $(".intro").show();
-  $(".game-container").hide();
-  $("#start").on("click", () => {
-    $(".intro").hide();
-    $(".game-container").show();
-  });
+  gameTutorial();
 
   makeDeck();
   shuffleDeck(game);

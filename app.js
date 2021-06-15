@@ -91,8 +91,8 @@ const checkMarble = (turn) => {
 // -1 from marble invt and +1 in marble pool
 const giveMarble = (turn) => {
   turn = checkTurn();
-  let playerMarb = game.players[turn].marble;
-  playerMarb -= 1;
+  // const playerMarb = game.players[turn].marble;
+  game.players[turn].marble -= 1;
   game.dealer.marble += 1;
   updateMarbCount();
   game.counter += 1;
@@ -102,12 +102,12 @@ const giveMarble = (turn) => {
 
 const updateMarbCount = (turn) => {
   turn = checkTurn();
-  const playerMarb = game.players[turn].marble;
+  let marbCount = game.players[turn].marble;
   // $(`#${turn}-marble p`).text(`${game[turn].marble} marbles`);
-  if (playerMarb === 1) {
-    $(`#${game.players[turn]["id"]}-marble p`).text(`${playerMarb} marble`);
+  if (marbCount === 1) {
+    $(`#${game.players[turn]["id"]}-marble p`).text(`${marbCount} marble`);
   } else {
-    $(`#${game.players[turn]["id"]}-marble p`).text(`${playerMarb} marbles`);
+    $(`#${game.players[turn]["id"]}-marble p`).text(`${marbCount} marbles`);
   }
 };
 
@@ -158,23 +158,26 @@ const finalScore = () => {
 };
 
 // find lowest score amongst all players
-const findLowestScore = (players) => {
+const findLowestScore = () => {
   finalScore();
-  players = game.players;
-  let lowest = players[0];
-  for (let s = 0; s < players.length; s++) {
-    if (players[s].score < lowest.score) {
-      lowest = players[s];
+  const allPlayers = game.players;
+
+  const goodWish = ["Congratulations", "Hurray", "Badaboom"];
+
+  let lowest = allPlayers[0];
+  for (let s = 0; s < allPlayers.length; s++) {
+    if (allPlayers[s].score < lowest.score) {
+      lowest = allPlayers[s];
     }
-  }
-  if (lowest["id"] === 'player') {
-    $("#turn h2").text(`Congratulations! Player 1 wins!`);
-  } else if (lowest["id"] === "computer") {
-    $("#turn h2").text("Hurray! Player 2 wins!");
-  } else if (lowest["id"] === "alien") {
-    $("#turn h2").text("Badaboom! Player 3 wins!");
-  } else {
-    $("#turn h2").text("Somehow, it's a tie.");
+    let randGoodWish = goodWish[Math.floor(Math.random() * goodWish.length)];
+    $("#turn h2").text(`${randGoodWish}! ${lowest.name} wins!`);
+
+    if (
+      allPlayers[s % allPlayers.length].score ===
+      allPlayers[(s + 1) % allPlayers.length].score
+    ) {
+      $("#turn h2").text("Somehow, it's a tie.");
+    }
   }
 };
 
@@ -191,8 +194,8 @@ const gameEnd = () => {
     // update player scores
     for (let pl = 0; pl < game.players.length; pl++) {
       // const playerArr = [p1.score, p2.score, p3.score];
-      $(`#${game.players[pl]['id']}-hand h3`).text(
-        `Player ${pl + 1} scores ${game.players[pl]['score']}`
+      $(`#${game.players[pl]["id"]}-hand h3`).text(
+        `Player ${pl + 1} scored ${game.players[pl]["score"]}`
       );
     }
     restartGame();
@@ -215,10 +218,10 @@ const resetData = () => {
   // empty player hands, reset marble count
   for (let p = 0; p < game.players.length; p++) {
     const players = game.players;
-    $(`#${players[p]['id']}-hand ul`).empty();
+    $(`#${players[p]["id"]}-hand ul`).empty();
     players[p].marble = game.startMarble;
     players[p].hand = [];
-    $(`#${players[p]['id']}-hand h3`).text(`${players[p]['name']}`);
+    $(`#${players[p]["id"]}-hand h3`).text(`${players[p]["name"]}`);
   }
 
   // new deck new counter
@@ -239,16 +242,13 @@ const resetData = () => {
 /////////////////////////////////////////////////////////////// render
 const render = (game) => {
   ///////////////////////////// start game
-  // dealCard();
   sortHand();
 
   ///////////////////////////// updating status on site
-  if (checkTurn() === "player") {
-    $("#turn h2").text(`Player 1's Turn`);
-  } else if (checkTurn() === "computer") {
-    $("#turn h2").text(`Player 2's Turn`);
-  } else {
-    $("#turn h2").text(`Player 3's Turn`);
+  for (let t = 0; t < game.players.length; t++) {
+    if (checkTurn() === t) {
+      $("#turn h2").text(`${game.players[t]["name"]}'s Turn`);
+    }
   }
   checkMarble();
 
@@ -258,16 +258,8 @@ const render = (game) => {
 
   for (let m = 0; m < game.players.length; m++) {
     const players = game.players;
-    $(`#${players[m]['name']}-marble p`).text(`${players[m].marble} marbles`);
+    $(`#${players[m]["id"]}-marble p`).text(`${players[m].marble} marbles`);
   }
-  // $("#player-marble p").text(`${game.players[0].marble} marbles`);
-  // $("#computer-marble p").text(`${game.players[1].marble} marbles`);
-  // $("#alien-marble p").text(`${game.players[2].marble} marbles`);
-
-  // $("#player-hand p").text(`player hand ${game.player.hand}`);
-  // $("#player-marble p").text(`${game.player.marble} marbles`);
-  // $("#computer-hand p").text(`computer hand ${game.computer.hand}`);
-  // $("#com-marble p").text(`${game.computer.marble} marbles`);
 
   ///////////////////////////// game end
   gameEnd();

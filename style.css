@@ -19,11 +19,11 @@ h3 {
 h1 {
   margin: 40px;
 }
-
+/*
 div {
-  /* border: 1px solid black; */
+  border: 1px solid black;
 }
-
+*/
 p {
   margin: 0 auto;
   padding: 20px 0;
@@ -102,7 +102,8 @@ ul li {
   right: 40px; */
 }
 
-.intro h2, .intro p {
+.intro h2,
+.intro p {
   padding: 0 0 20px 0;
 }
 
@@ -110,7 +111,8 @@ ul li {
   margin: 0;
 }
 
-.intro-container, .game-container {
+.intro-container,
+.game-container {
   margin-bottom: 40px;
 }
 
@@ -189,13 +191,15 @@ div#marble-pool p {
 }
 
 .player-container,
-.computer-container, .alien-container {
+.computer-container,
+.alien-container {
   padding: 10px 40px;
   display: grid;
   grid-template-columns: 7fr 1fr;
 }
 
 #player-marble,
-#computer-marble, #alien-marble {
+#computer-marble,
+#alien-marble {
   text-align: right;
 }

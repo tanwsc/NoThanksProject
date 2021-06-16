@@ -42,7 +42,6 @@ button {
 }
 
 button:hover {
-  /* background: rgb(255, 174, 150); */
   color: rgb(245, 245, 245);
   cursor: pointer;
 }
@@ -81,12 +80,9 @@ ul li {
 
 .intro-container {
   margin: 0 auto;
-  /* padding: 0 40px; */
   width: 100%;
   align-content: center;
   position: absolute;
-  /* left: 40px;
-  right: 40px; */
 }
 
 .intro {
@@ -98,8 +94,6 @@ ul li {
   background: rgb(245, 245, 245);
   text-align: justify;
   position: relative;
-  /* left: 40px;
-  right: 40px; */
 }
 
 .intro h2,
@@ -190,16 +184,12 @@ div#marble-pool p {
   width: 100%;
 }
 
-.player-container,
-.computer-container,
-.alien-container {
+.player-box {
   padding: 10px 40px;
   display: grid;
   grid-template-columns: 7fr 1fr;
 }
 
-#player-marble,
-#computer-marble,
-#alien-marble {
+.marble {
   text-align: right;
 }

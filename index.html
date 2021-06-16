@@ -14,17 +14,21 @@
     <div class="intro-container">
       <div class="intro">
         <h2>Welcome to No Thanks!</h2>
-        <p>This is a 3-player game with the objective of scoring the lowest points.</p>
         <p>
-          There is a deck of 25 cards, each with a value ranging from 1 to 35.
-          Every player begins with 10 marbles. The game starts with a card played
-          from the deck. Each player is given the option to take the card, or to
-          give a marble.
+          This is a 3-player game with the objective of scoring the lowest
+          points.
         </p>
         <p>
-          If a player decides to give a marble, it will accumulate in the marble pool. If
-          a player decides to take a card, they take with them all the marbles
-          in the pool, adding to their current number of marbles.
+          There is a deck of 25 cards, each with a value ranging from 1 to 35.
+          Every player begins with 10 marbles. The game starts with a card
+          played from the deck. Each player is given the option to take the
+          card, or to give a marble.
+        </p>
+        <p>
+          If a player decides to give a marble, it will accumulate in the marble
+          pool. If a player decides to take a card, they take with them all the
+          marbles in the pool, adding to their current number of marbles. The
+          game ends when all cards in the deck are drawn.
         </p>
         <p>
           Scores are tabulated by totalling the value of each card. If cards of
@@ -52,30 +56,30 @@
         <button id="take">Take Card</button>
         <button id="give">Give Marble</button>
       </div>
-      <div class="player-container">
+      <div class="player-box">
         <div id="player-hand">
           <h3>Player 1</h3>
           <ul></ul>
         </div>
-        <div id="player-marble">
+        <div class='marble' id="player-marble">
           <p></p>
         </div>
       </div>
-      <div class="computer-container">
+      <div class="player-box">
         <div id="computer-hand">
           <h3>Player 2</h3>
           <ul></ul>
         </div>
-        <div id="computer-marble">
+        <div class='marble' id="computer-marble">
           <p></p>
         </div>
       </div>
-      <div class="alien-container">
+      <div class="player-box">
         <div id="alien-hand">
           <h3>Player 3</h3>
           <ul></ul>
         </div>
-        <div id="alien-marble">
+        <div class='marble' id="alien-marble">
           <p></p>
         </div>
       </div>

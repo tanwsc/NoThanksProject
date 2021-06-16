@@ -25,6 +25,32 @@ const gameTutorial = () => {
   });
 };
 
+/////////////////////////////////////////////////////////////// make new player??
+class Player {
+  constructor(name, id) {
+    this.name = name;
+    this.id = id;
+    this.hand = [];
+    this.marble = game.startMarble;
+    this.score = 0;
+  }
+
+  addPlayer() {
+    const $newPlayerContainer = $("<div>").addClass(`player-box`);
+    const $newPlayerHand = $("<div>").attr("id", `${this.id}-hand`);
+    const $newPlayerTitle = $("<h3>").text(`${this.name}`);
+    const $newPlayerMarble = $("<div>")
+      .addClass("marble")
+      .attr("id", `${this.id}-marble`)
+      .append($("<p>"));
+    $newPlayerHand.append($newPlayerTitle, $("<ul>"));
+    $newPlayerContainer.append($newPlayerHand, $newPlayerMarble);
+    $(".game-container").append($newPlayerContainer);
+  }
+}
+
+
+
 /////////////////////////////////////////////////////////////// make deck
 // value 1 - 35, set number 35 to const
 const makeDeck = () => {
@@ -36,14 +62,13 @@ const makeDeck = () => {
 /////////////////////////////////////////////////////////////// shuffle deck
 // -10 cards, push rest of deck into dealer hand
 const shuffleDeck = (game) => {
-  let playDeck = game.deck;
-  let count = playDeck.length;
+  let count = game.deck.length;
   while (count) {
-    let temp = playDeck.splice(Math.floor(Math.random() * count), 1);
-    playDeck.splice(count, 0, temp[0]);
+    let temp = game.deck.splice(Math.floor(Math.random() * count), 1);
+    game.deck.splice(count, 0, temp[0]);
     count -= 1;
   }
-  playDeck = playDeck.slice(0, game.startDeck - 10);
+  game.deck = game.deck.slice(0, game.startDeck - 10);
   dealCard();
   // console.log(game.deck);
 };
@@ -91,7 +116,6 @@ const checkMarble = (turn) => {
 // -1 from marble invt and +1 in marble pool
 const giveMarble = (turn) => {
   turn = checkTurn();
-  // const playerMarb = game.players[turn].marble;
   game.players[turn].marble -= 1;
   game.dealer.marble += 1;
   updateMarbCount();
@@ -103,7 +127,6 @@ const giveMarble = (turn) => {
 const updateMarbCount = (turn) => {
   turn = checkTurn();
   let marbCount = game.players[turn].marble;
-  // $(`#${turn}-marble p`).text(`${game[turn].marble} marbles`);
   if (marbCount === 1) {
     $(`#${game.players[turn]["id"]}-marble p`).text(`${marbCount} marble`);
   } else {
@@ -187,26 +210,20 @@ const gameEnd = () => {
   if (game.dealer.hand.length === 0) {
     $("#take").attr("disabled", true);
     $("#give").attr("disabled", true);
-    // render(game);
-
     findLowestScore();
 
     // update player scores
     for (let pl = 0; pl < game.players.length; pl++) {
-      // const playerArr = [p1.score, p2.score, p3.score];
       $(`#${game.players[pl]["id"]}-hand h3`).text(
         `Player ${pl + 1} scored ${game.players[pl]["score"]}`
       );
     }
     restartGame();
   }
-  // render();
 };
 
 // make new button or note to restart game
 const restartGame = () => {
-  // $takeCard.attr("disabled", true);
-  // $giveMarb.attr("disabled", true);
   $("#take").hide();
   $("#give").hide();
   const $restartButton = $("<button>").attr("id", "restart").text("New game?");
@@ -271,6 +288,10 @@ const main = () => {
 
   makeDeck();
   shuffleDeck(game);
+
+  // const p4 = new Player("Player 4", "player4");
+  // game.players.push(p4);
+  // p4.addPlayer();
 
   render(game);
 

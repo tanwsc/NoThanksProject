@@ -161,7 +161,6 @@ const finalScore = () => {
 const findLowestScore = () => {
   finalScore();
   const allPlayers = game.players;
-
   const goodWish = ["Congratulations", "Hurray", "Badaboom"];
 
   let lowest = allPlayers[0];
@@ -169,14 +168,15 @@ const findLowestScore = () => {
     if (allPlayers[s].score < lowest.score) {
       lowest = allPlayers[s];
     }
-    let randGoodWish = goodWish[Math.floor(Math.random() * goodWish.length)];
-    $("#turn h2").text(`${randGoodWish}! ${lowest.name} wins!`);
 
     if (
       allPlayers[s % allPlayers.length].score ===
       allPlayers[(s + 1) % allPlayers.length].score
     ) {
-      $("#turn h2").text("Somehow, it's a tie.");
+      $("#turn h2").text("Somehow, there's a tie.");
+    } else {
+      let randGoodWish = goodWish[Math.floor(Math.random() * goodWish.length)];
+      $("#turn h2").text(`${randGoodWish}! ${lowest.name} wins!`);
     }
   }
 };

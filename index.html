@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <link href="style.css" rel="stylesheet" />
-    <script src="app.js"></script>
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="js/app.js"></script>
     <title>No Thanks!</title>
   </head>
   <body>
@@ -15,7 +15,7 @@
       <div class="intro">
         <h2>Welcome to No Thanks!</h2>
         <p>
-          This is a 3-player game with the objective of scoring the lowest
+          This is a 3-5 player game with the objective of scoring the lowest
           points.
         </p>
         <p>
@@ -37,7 +37,9 @@
           also be subtracted from the score.
         </p>
         <p>Shall we begin?</p>
-        <button id="start">Yes, please!</button>
+        <button class="start" id='0'>Yes, 3 players!</button>
+        <button class="start" id='1'>4 players!</button>
+        <button class="start" id='2'>5 players!</button>
       </div>
     </div>
     <div class="game-container">

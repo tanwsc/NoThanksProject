@@ -1,0 +1,195 @@
+body,
+header {
+  margin: 0 auto;
+  padding: 0;
+  font-family: sans-serif;
+  color: rgb(69, 82, 108);
+}
+
+header {
+  height: 80px;
+}
+
+h2,
+h3 {
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+h1 {
+  margin: 40px;
+}
+/*
+div {
+  border: 1px solid black;
+}
+*/
+p {
+  margin: 0 auto;
+  padding: 20px 0;
+  display: block;
+  font-size: 18px;
+}
+
+button {
+  margin: 0 10px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: rgb(255, 174, 150);
+  color: rgb(69, 82, 108);
+  font-size: 18px;
+}
+
+button:hover {
+  color: rgb(245, 245, 245);
+  cursor: pointer;
+}
+
+button:active {
+  background: rgb(224, 128, 99);
+  color: rgb(245, 245, 245);
+}
+
+button[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 0;
+  width: 75px;
+  height: 106px;
+  display: inline-block;
+  list-style: none;
+  border-radius: 10px;
+  background: rgb(128, 159, 160);
+  color: rgb(245, 245, 245);
+  font-size: 28px;
+  text-align: center;
+  align-content: center;
+  line-height: 106px;
+}
+
+.intro-container {
+  margin: 0 auto;
+  width: 100%;
+  align-content: center;
+  position: absolute;
+}
+
+.intro {
+  margin: 0 auto 60px auto;
+  padding: 40px;
+  border: 6px solid rgb(128, 159, 160);
+  border-radius: 10px;
+  max-width: 800px;
+  background: rgb(245, 245, 245);
+  text-align: justify;
+  position: relative;
+}
+
+.intro h2,
+.intro p {
+  padding: 0 0 20px 0;
+}
+
+.start {
+  margin: 0;
+}
+
+.intro-container,
+.game-container {
+  margin-bottom: 40px;
+}
+
+.dealer-container,
+.options-container {
+  margin: 10px auto;
+  text-align: center;
+}
+
+.dealer-container {
+  margin: auto;
+  width: 500px;
+  height: 220px;
+  align-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 210px;
+  column-gap: 10px;
+}
+
+.dealer-container div {
+  margin: 0 auto;
+  display: inline-block;
+  width: 150px;
+  height: 210px;
+  padding: 0;
+  border: 0;
+  border-radius: 15px;
+}
+
+div#deck {
+  background: rgb(68, 103, 104);
+  color: rgb(245, 245, 245);
+}
+
+div#deal-card {
+  background: rgb(128, 159, 160);
+  color: rgb(245, 245, 245);
+}
+
+div#deck p,
+div#deal-card p {
+  padding: 0;
+  height: 210px;
+  line-height: 210px;
+  font-size: 70px;
+}
+
+div#marble-pool {
+  border: 6px solid rgb(128, 159, 160);
+  background: rgb(245, 245, 245);
+  width: 138px;
+  height: 198px;
+}
+
+div#marble {
+  margin: 50% auto;
+  width: 50px;
+  height: 50px;
+  background: cornflowerblue;
+  border: 0;
+  border-radius: 100%;
+}
+
+div#marble-pool p {
+  padding: 0;
+  position: relative;
+  top: -40px;
+  color: rgb(69, 82, 108);
+  font-size: 40px;
+}
+
+.options-container {
+  display: block;
+  width: 100%;
+}
+
+.player-box {
+  padding: 10px 40px;
+  display: grid;
+  grid-template-columns: 7fr 1fr;
+}
+
+.marble {
+  text-align: right;
+}

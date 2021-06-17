@@ -165,6 +165,13 @@ const takeCard = (turn) => {
   render(game);
 };
 
+const takeAll = () => {
+  for (let t = 0; t < 25; t++) {
+    takeCard();
+  }
+  
+}
+
 /////////////////////////////////////////////////////////////// tabulte points
 // find consecutive numbers, group them
 const sumNoConsec = (arr) => {
@@ -197,22 +204,21 @@ const findLowestScore = () => {
   finalScore();
   const allPlayers = game.players;
   const goodWish = ["Congratulations", "Hurray", "Badaboom"];
-
+  let count = 1;
   let lowest = allPlayers[0];
-  for (let s = 0; s < allPlayers.length; s++) {
+  for (let s = 1; s < allPlayers.length; s++) {
     if (allPlayers[s].score < lowest.score) {
       lowest = allPlayers[s];
+      count = 1;
+    } else if (allPlayers[s].score === lowest.score) {
+      count += 1;
     }
-
-    if (
-      allPlayers[s % allPlayers.length].score ===
-      allPlayers[(s + 1) % allPlayers.length].score
-    ) {
-      $("#turn h2").text("Somehow, there's a tie.");
-    } else {
-      let randGoodWish = goodWish[Math.floor(Math.random() * goodWish.length)];
-      $("#turn h2").text(`${randGoodWish}! ${lowest.name} wins!`);
-    }
+  }
+  if ((count > 1)) {
+    $("#turn h2").text("Somehow, there's a tie.");
+  } else {
+    let randGoodWish = goodWish[Math.floor(Math.random() * goodWish.length)];
+    $("#turn h2").text(`${randGoodWish}! ${lowest.name} wins!`);
   }
 };
 
@@ -306,7 +312,7 @@ const main = () => {
 
   render(game);
 
-  $("#take").on("click", takeCard);
+  $("#take").on("click", takeAll);
   $("#give").on("click", giveMarble);
 };
 

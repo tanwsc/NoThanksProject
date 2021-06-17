@@ -165,13 +165,6 @@ const takeCard = (turn) => {
   render(game);
 };
 
-const takeAll = () => {
-  for (let t = 0; t < 25; t++) {
-    takeCard();
-  }
-  
-}
-
 /////////////////////////////////////////////////////////////// tabulte points
 // find consecutive numbers, group them
 const sumNoConsec = (arr) => {
@@ -214,7 +207,7 @@ const findLowestScore = () => {
       count += 1;
     }
   }
-  if ((count > 1)) {
+  if (count > 1) {
     $("#turn h2").text("Somehow, there's a tie.");
   } else {
     let randGoodWish = goodWish[Math.floor(Math.random() * goodWish.length)];
@@ -312,7 +305,7 @@ const main = () => {
 
   render(game);
 
-  $("#take").on("click", takeAll);
+  $("#take").on("click", takeCard);
   $("#give").on("click", giveMarble);
 };
 

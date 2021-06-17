@@ -155,6 +155,9 @@ const takeCard = (turn) => {
   game.dealer.marble = 0;
   sortHand();
   updateMarbCount();
+  $(`#${player["id"]}-hand h3`).text(
+    `${player.name} currently scores ${sumNoConsec(player.hand)}`
+  );
   game.counter += 1;
   if (game.deck.length !== 0) {
     dealCard();
